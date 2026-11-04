@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>f0rgent · practical AI agents</title>
+<meta name="description" content="How AI agents actually do practical things, with the prompts and skills given away. Claude skills catalog, free skills, weekly email.">
+<meta property="og:title" content="f0rgent · practical AI agents">
+<meta property="og:description" content="Claude skills catalog, free skills and a weekly email with new ones.">
+<meta property="og:image" content="https://f0rgent.github.io/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@f0rgent">
+<link rel="icon" href="assets/avatar.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1e8d8;--card:#fbf6ec;--ink:#0e2a2d;--mute:#0e2a2d99;--line:#0e2a2d1f;--teal:#1d7f86;--gold:#e8b04a;--red:#c2382d;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;
+ background-image:radial-gradient(#0e2a2d14 1.2px,transparent 1.2px);background-size:22px 22px}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right))}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:28px}
+.me{display:flex;align-items:center;gap:14px;text-decoration:none}
+.me img{width:56px;height:56px;border-radius:50%;border:3px solid var(--ink);object-fit:cover}
+.me b{display:block;font-size:19px;letter-spacing:-.01em}.me span{color:var(--mute);font-size:15px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;font-weight:700;font-size:15px;text-decoration:none;border:2px solid var(--ink);white-space:nowrap}
+.btn.dark{background:var(--ink);color:var(--bg)}.btn.teal{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn:hover{transform:translateY(-1px)}
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:24px;align-items:center;padding-block:10px 30px}
+.hero>*{min-width:0}
+h1{font-size:clamp(42px,6.2vw,78px);line-height:.95;letter-spacing:-.045em;font-weight:900;margin:0 0 22px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--teal)}
+.lead{font-size:clamp(18px,2vw,21px);color:var(--ink);opacity:.82;max-width:34ch;margin:0 0 26px;font-weight:500}
+.lead b{background:var(--gold);padding:1px 7px;border-radius:6px;opacity:1}
+.meme{position:relative}
+.meme img{width:100%;display:block;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 12%,#000 88%,transparent),linear-gradient(to right,transparent,#000 8%,#000 92%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(to bottom,transparent,#000 12%,#000 88%,transparent),linear-gradient(to right,transparent,#000 8%,#000 92%,transparent);mask-composite:intersect}
+.caps{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:0 6% 0 8%}
+.cap{font-weight:900;letter-spacing:-.02em;font-size:clamp(15px,1.8vw,22px);white-space:nowrap}
+.cap.l{color:var(--teal)}.cap.r{color:var(--mute);text-align:center}
+.stamp{position:absolute;right:9%;bottom:6%;color:var(--red);border:4px solid var(--red);border-radius:10px;padding:0 12px;font-weight:900;font-size:clamp(16px,2.2vw,26px);transform:rotate(-6deg);background:#f1e8d8cc}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-block:10px 46px}
+.stat{background:var(--card);border:2px solid var(--ink);border-radius:18px;padding:18px 20px;box-shadow:0 6px 0 var(--ink)}
+.stat small{color:var(--mute);font-weight:600;font-size:14px}.stat b{display:block;font-size:40px;letter-spacing:-.03em;line-height:1.1;margin-top:4px}
+.stat span{color:var(--mute);font-size:14px}
+h2{font-size:clamp(28px,3.4vw,40px);letter-spacing:-.03em;margin:0 0 6px;font-weight:900}
+.sub{color:var(--mute);margin:0 0 20px}
+.tools{position:sticky;top:0;z-index:5;background:var(--bg);padding-block:14px 12px;border-bottom:2px solid var(--line);margin-bottom:22px}
+.search{display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:0 16px}
+.search input{flex:1;min-width:0;border:0;background:transparent;font:500 17px Inter,sans-serif;padding:14px 0;color:var(--ink);outline:none}
+.search kbd{font:600 12px var(--mono);color:var(--mute);border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 0 2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:2px solid var(--ink);background:transparent;border-radius:999px;padding:7px 14px;font:700 14px Inter,sans-serif;color:var(--ink);cursor:pointer}
+.chip.on{background:var(--ink);color:var(--bg)}
+.chip i{font-style:normal;opacity:.6;font-weight:600;margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.card{background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card .t{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.card a.n{font:700 16px var(--mono);text-decoration:none;word-break:break-word}
+.card a.n:hover{color:var(--teal)}
+.card .st{font:700 13px var(--mono);color:var(--mute);white-space:nowrap}
+.card p{margin:0;font-size:15px;line-height:1.45;flex:1}
+.card .rp{font-size:13px;color:var(--mute);text-decoration:none;word-break:break-all}
+.card .rp:hover{color:var(--ink)}
+.cp{display:flex;align-items:center;gap:8px;background:var(--ink);color:var(--bg);border-radius:10px;padding:8px 10px;border:0;cursor:pointer;font:500 12px var(--mono);text-align:left;width:100%}
+.cp code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cp span{flex:none;color:var(--gold);font-weight:700}
+.tag{align-self:flex-start;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;background:#0e2a2d10}
+.empty{padding:40px;text-align:center;color:var(--mute)}
+section{margin-block:56px}
+.bonus{display:grid;grid-template-columns:1.2fr 1fr;gap:20px;background:var(--ink);color:var(--bg);border-radius:24px;padding:32px}
+.bonus>*{min-width:0}
+.bonus h2{color:var(--bg)}.bonus p{opacity:.85;margin:0 0 18px}
+.bonus ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.bonus li{background:#ffffff12;border-radius:12px;padding:12px 14px;font-size:15px}
+.bonus li b{color:var(--gold)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.step{background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:18px;min-width:0}
+.step b{font:800 13px var(--mono);color:var(--teal)}
+.step h3{margin:6px 0 10px;font-size:19px}
+pre{margin:0;background:var(--ink);color:var(--bg);border-radius:10px;padding:12px 14px;font:500 13px/1.5 var(--mono);overflow-x:auto}
+details{background:var(--card);border:2px solid var(--ink);border-radius:16px;margin-bottom:10px}
+summary{cursor:pointer;padding:14px 18px;font-weight:700;display:flex;justify-content:space-between;gap:10px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary span{color:var(--mute);font-weight:600;font-size:14px;white-space:nowrap}
+details div{padding:0 18px 16px;font:500 13px/1.7 var(--mono);color:var(--mute);word-break:break-word}
+footer{border-top:2px solid var(--line);padding-block:30px 50px;color:var(--mute);font-size:14px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{font-weight:700;color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;transition:.2s;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%)}
+@media (max-width:860px){.hero{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.bonus,.steps{grid-template-columns:1fr}header.top{flex-wrap:wrap}}
+
+.hub{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tile{background:var(--card);border:2px solid var(--ink);border-radius:20px;padding:22px;box-shadow:0 6px 0 var(--ink);display:flex;flex-direction:column;gap:10px;min-width:0;text-decoration:none}
+.tile:hover{transform:translateY(-2px)}
+.tile .k{font:800 13px var(--mono);color:var(--teal)}
+.tile h3{margin:0;font-size:24px;letter-spacing:-.02em}
+.tile p{margin:0;flex:1;color:var(--ink);opacity:.82}
+.tile .go{font-weight:800}
+.tile.paid{background:var(--ink);color:var(--bg)}.tile.paid p{color:var(--bg)}.tile.paid .k{color:var(--gold)}
+.sign{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:center;background:var(--gold);border:2px solid var(--ink);border-radius:24px;padding:32px;box-shadow:0 8px 0 var(--ink)}
+.sign>*{min-width:0}.sign p{margin:0;font-weight:500}
+form.mail{display:flex;gap:10px;flex-wrap:wrap}
+form.mail input{flex:1;min-width:200px;border:2px solid var(--ink);border-radius:999px;padding:13px 18px;font:500 16px Inter,sans-serif;background:var(--card);color:var(--ink)}
+form.mail button{cursor:pointer}
+.note{font-size:13px;opacity:.7;margin-top:8px}
+.pack{display:grid;grid-template-columns:1fr 1fr;gap:24px;background:var(--ink);color:var(--bg);border-radius:24px;padding:32px}
+.pack>*{min-width:0}.pack h2{color:var(--bg)}.pack p{opacity:.85}
+.pack ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.pack li{background:#ffffff12;border-radius:12px;padding:12px 14px}.pack li b{color:var(--gold)}
+@media (max-width:860px){.hub,.sign,.pack{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="me" href="https://x.com/f0rgent"><img src="assets/avatar.jpg" alt=""><div><b>f0rgent</b><span>@f0rgent</span></div></a>
+  <div class="btns"><a class="btn dark" href="https://x.com/f0rgent">Follow on 𝕏</a></div>
+</header>
+
+<div class="hero">
+  <div>
+    <h1>AI agents doing <em>real</em> work.</h1>
+    <p class="lead">I show how AI agents actually do practical things, and give away the prompts and skills. <b>Free.</b></p>
+    <div class="btns"><a class="btn teal" href="claude-skills-catalog/">Open the skills catalog</a><a class="btn" href="#email">Get new skills by email</a></div>
+  </div>
+  <div class="meme" aria-label="A muscular robot labelled Claude with skills next to a skinny crying robot labelled Claude without skills">
+    <div class="caps"><div class="cap l">Claude with skills</div><div class="cap r">Claude without skills</div></div>
+    <img src="assets/robots.jpg" alt="">
+    <div class="stamp">AI slop</div>
+  </div>
+</div>
+
+<section style="margin-top:20px">
+  <div class="hub">
+    <a class="tile" href="claude-skills-catalog/"><span class="k">FREE · CATALOG</span><h3>Claude Skills Catalog</h3><p>2,135 open-source skills from 57 repos, sorted by niche. Search, copy the install command, done.</p><span class="go">Open →</span></a>
+    <a class="tile" href="https://github.com/f0rgent/claude-skills-catalog/tree/main/skills/x-reach"><span class="k">FREE · SKILL</span><h3>x-reach</h3><p>A Claude skill for writing X posts that get reach, built from a study of 2,194 video posts.</p><span class="go">Get it →</span></a>
+    <a class="tile paid" href="#pack"><span class="k">SOON · PACK</span><h3>X Creator Pack</h3><p>The skills I use to plan, write and check every post and article. List members get it first.</p><span class="go">See what's inside →</span></a>
+  </div>
+</section>
+
+<section id="email">
+  <div class="sign">
+    <div>
+      <h2>New skills, once a week</h2>
+      <p>The best new Claude skills I found and tested, plus the prompts behind my posts. One email a week, unsubscribe anytime.</p>
+    </div>
+    <div>
+      <form class="mail" id="mail" action="https://app.kit.com/forms/10143910/subscriptions" method="post">
+        <input type="email" name="email_address" placeholder="you@email.com" required aria-label="Email">
+        <button class="btn dark" type="submit">Subscribe</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section id="pack">
+  <div class="pack">
+    <div>
+      <h2>X Creator Pack</h2>
+      <p>The Claude skills I run my X account with, packed so you can install them in one command. Coming soon. People on the email list get it first, at an early price.</p>
+      <a class="btn teal" id="buy" href="#email">Join the list to get it first</a>
+    </div>
+    <ul>
+      <li><b>x-articles</b>: two templates for long X Articles, from research to self-check.</li>
+      <li><b>x-reach pro</b>: hooks, post structure and a review checklist before you hit post.</li>
+      <li><b>growth playbook</b>: what to post, when to reply, how to turn one hit into the next.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <span>Made by <a href="https://x.com/f0rgent">@f0rgent</a> · Showing how AI agents actually do practical things + giving away the prompts</span>
+  <span><a href="https://github.com/f0rgent">GitHub</a></span>
+</footer>
+</div>
+</body>
+</html>
