@@ -113,6 +113,7 @@ form.mail button{cursor:pointer}
 .pack>*{min-width:0}.pack h2{color:var(--bg)}.pack p{opacity:.85}
 .pack ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
 .pack li{background:#ffffff12;border-radius:12px;padding:12px 14px}.pack li b{color:var(--gold)}
+.cmp{grid-column:1/-1;overflow-x:auto}.cmp table{width:100%;border-collapse:collapse;font-size:15px}.cmp th,.cmp td{padding:10px 12px;border-bottom:1px solid #ffffff1f;text-align:center}.cmp th:first-child,.cmp td:first-child{text-align:left}.cmp th{color:var(--gold);font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
 @media (max-width:860px){.hub,.sign,.pack{grid-template-columns:1fr}}
 </style>
 </head>
@@ -127,7 +128,7 @@ form.mail button{cursor:pointer}
   <div>
     <h1>AI agents doing <em>real</em> work.</h1>
     <p class="lead">I show how AI agents actually do practical things.</p>
-    <p class="fine">The catalog and the basic skill are free. The full pack is paid.</p>
+    <p class="fine">The catalog and the basic skill are free. The full pack is $9.</p>
     <div class="btns"><a class="btn teal" href="claude-skills-catalog/">Open the skills catalog</a><a class="btn" href="#email">Get new skills by email</a></div>
   </div>
   <div class="meme" aria-label="A muscular robot labelled Claude with skills next to a skinny crying robot labelled Claude without skills">
@@ -141,7 +142,7 @@ form.mail button{cursor:pointer}
   <div class="hub">
     <a class="tile" href="claude-skills-catalog/"><span class="k">FREE · CATALOG</span><h3>Claude Skills Catalog</h3><p>2,139 open-source skills from 58 repos, sorted by niche. Search, copy the install command, done.</p><span class="go">Open →</span></a>
     <a class="tile" href="https://github.com/f0rgent/claude-skills-catalog/tree/main/skills/x-reach"><span class="k">FREE · SKILL</span><h3>x-reach</h3><p>A Claude skill for writing X posts that get reach, built from a study of 2,194 video posts.</p><span class="go">Get it →</span></a>
-    <a class="tile paid" href="#pack"><span class="k">SOON · PACK</span><h3>X Creator Pack</h3><p>The skills I use to plan, write and check every post and article. List members get it first.</p><span class="go">See what's inside →</span></a>
+    <a class="tile paid" href="#pack"><span class="k">PRO · $9</span><h3>X Creator Pack</h3><p>The two skills I run my X account with: post templates, the first-reply recipe and the agent prompts from my videos.</p><span class="go">See what's inside →</span></a>
   </div>
 </section>
 
@@ -164,14 +165,26 @@ form.mail button{cursor:pointer}
   <div class="pack">
     <div>
       <h2>X Creator Pack</h2>
-      <p>The Claude skills I run my X account with, packed so you can install them in one command. Coming soon. People on the email list get it first, at an early price.</p>
-      <a class="btn teal" id="buy" href="#email">Join the list to get it first</a>
+      <p>The two Claude skills I run my X account with, packed so you can install them in one command. Early price $9. It goes up as new prompts are added, and buyers get every update free.</p>
+      <a class="btn teal" id="buy" href="https://f0rgent.gumroad.com/l/x-creator-pack" target="_blank" rel="noopener">Buy for $9</a>
     </div>
     <ul>
-      <li><b>x-articles</b>: two templates for long X Articles, from research to self-check.</li>
-      <li><b>x-reach pro</b>: hooks, post structure and a review checklist before you hit post.</li>
-      <li><b>growth playbook</b>: what to post, when to reply, how to turn one hit into the next.</li>
+      <li><b>x-reach-pro</b>: what gets recommended on X (from a study of 2,194 video posts), 4 post templates, the first-reply recipe, the reply game, series, a video checklist and a review checklist.</li>
+      <li><b>agent-episodes</b>: the full loop for "AI agent audits my ___" posts, plus the two prompts I ran on camera: home Wi-Fi audit and Vitalik mode.</li>
     </ul>
+    <div class="cmp">
+      <table>
+        <thead><tr><th></th><th>Free</th><th>Pro pack</th></tr></thead>
+        <tbody>
+          <tr><td>Skills catalog (2,139 skills)</td><td>✓</td><td>✓</td></tr>
+          <tr><td>x-reach: data on what gets reach</td><td>✓</td><td>✓</td></tr>
+          <tr><td>4 post templates + first-reply recipe</td><td></td><td>✓</td></tr>
+          <tr><td>Reply game, series, video checklist</td><td></td><td>✓</td></tr>
+          <tr><td>Episode loop: prompt, record, edit, post</td><td></td><td>✓</td></tr>
+          <tr><td>New prompts after each episode</td><td></td><td>✓</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
 
