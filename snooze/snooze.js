@@ -164,7 +164,7 @@ function hint(s) { const a = S.ring ? 0.9 * (0.75 + 0.25 * Math.sin(S.t * 3)) : 
 
 // ---------------- modes ----------------
 const M = [];
-function snooze(mins, until, island) { if (!S.ring) return; S.ring = false; S.until = until; S.island = island; S.Nt = 1; log('snooze'); }
+function snooze(mins, until, island) { if (!S.ring) return; if (window.ALARM) until = window.ALARM.snoozed(mins); S.ring = false; S.until = until; S.island = island; S.Nt = 1; log('snooze'); }
 function timeMinus(m) { return m <= 0 ? '7:00' : `6:${String(60 - m).padStart(2, '0')}`; }
 
 // 1 — push the sun back down
@@ -345,8 +345,8 @@ function draw() {
   x.save(); x.translate(0, OYm); bloom(sun); x.restore();
   // top band: date + glass time
   const dY = PHONE ? 250 : SY + 175, tB = PHONE ? 600 : SY + 455;
-  label('Monday, November 9', W / 2, dY, PHONE ? '600 50px "Inter"' : '600 40px "Inter"', 'rgba(255,255,255,0.92)');
-  const tstr = m.time(); const tf = PHONE ? '700 300px "Inter"' : '700 290px "Inter"'; const tw = measure(tstr, tf);
+  label(window.ALARM ? window.ALARM.date() : 'Monday, November 9', W / 2, dY, PHONE ? '600 50px "Inter"' : '600 40px "Inter"', 'rgba(255,255,255,0.92)');
+  const tstr = window.ALARM ? window.ALARM.clock() : m.time(); const tf = PHONE ? '700 300px "Inter"' : '700 290px "Inter"'; const tw = measure(tstr, tf);
   glass(TXT(tstr, W / 2, tB, tf), [W / 2 - tw / 2, tB - 210, tw, 215], { thick: 14, mag: 1.08, edgeMag: 1.3, tint: 0.14, caustic: 0.18, spec: false, rim: 1.6, edge: false });
   // mid band
   x.save(); x.translate(0, OYm); OYc = OYm;
@@ -365,12 +365,14 @@ function draw() {
     if (S.snoozeK > 0.3) { x.save(); x.globalAlpha = (S.snoozeK - 0.3) / 0.7; x.fillStyle = S.island === "You're late" ? '#ff5a5a' : ACC; x.beginPath(); x.arc(icx - iw / 2 + 50, iy + ih / 2, 12, 0, 6.29); x.fill(); x.fillStyle = S.island === "You're late" ? '#ff8a8a' : '#fff'; x.font = '700 34px "Inter"'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(S.island, icx + 16, iy + ih / 2 + 1); x.restore(); } }
   x.restore();
   // caption pill (mode switcher)
+  if (!window.ALARM) {
   x.save(); x.translate(0, OYm); OYc = OYm;
   const cap = `${String(S.mode + 1).padStart(2, '0')}  ${m.name}`; const cf = '700 36px "Inter"'; const cwid = measure(cap, cf) + 150;
   glass(RR(W / 2 - cwid / 2, 1232, cwid, 84, 42), [W / 2 - cwid / 2, 1232, cwid, 84], { thick: 16, tint: 0.16 });
   label('‹', W / 2 - cwid / 2 + 38, 1272, '600 44px "Inter"', '#fff', 0.7); label('›', W / 2 + cwid / 2 - 38, 1272, '600 44px "Inter"', '#fff', 0.7);
   label(cap, W / 2, 1275, cf);
   x.restore(); OYc = 0;
+  }
   if (PHONE) phoneChrome();
   // fade from previous scene
   if (S.fade > 0) { x.save(); x.globalAlpha = E(S.fade); x.drawImage(SNAP, 0, 0); x.restore(); }
@@ -421,6 +423,7 @@ function ptr(type, sp) {
   S.cur.x = sp.x; S.cur.y = sp.y; const p = { x: sp.x, y: sp.y - OYm };
   if (type === 'down') {
     S.cur.down = true;
+    if (window.ALARM) { M[S.mode].down(p); return; }
     if (p.y > 1220 && p.y < 1330) { const cap = `${String(S.mode + 1).padStart(2, '0')}  ${M[S.mode].name}`; const cw = measure(cap, '700 36px "Inter"') + 150; if (p.x < W / 2 - cw / 2 + 80) return setMode(S.mode - 1); if (p.x > W / 2 + cw / 2 - 80) return setMode(S.mode + 1); return setMode(S.mode); }
     if (!S.ring && p.y < 1220) return setMode(S.mode, true);
     M[S.mode].down(p);
@@ -435,5 +438,5 @@ window.api = { S, M, step, draw, setMode, ptr, overlay(o) { S.overlay = o; }, sn
 const REC = new URLSearchParams(location.search).has('rec');
 Promise.race([Promise.all([document.fonts.load('700 60px "Inter"'), document.fonts.load('600 20px "Inter"'), document.fonts.load('700 20px "JetBrains Mono"')]).catch(() => {}), new Promise((r) => setTimeout(r, 2500))]).then(() => {
   setMode(0, false); draw(); window.ready = true;
-  if (!REC) { let last = performance.now(); const loop = (now) => { step(Math.min(0.05, (now - last) / 1000)); last = now; draw(); requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
+  if (!REC) { let last = performance.now(); const loop = (now) => { if (!window.SNZ_PAUSE) { step(Math.min(0.05, (now - last) / 1000)); draw(); } last = now; requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
 });

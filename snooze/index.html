@@ -10,8 +10,9 @@
 <style>html,body{margin:0;height:100%;background:#000;overflow:hidden;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 body{display:flex;align-items:center;justify-content:center}
 canvas{display:block;touch-action:none}
+#al{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(60px + env(safe-area-inset-bottom,0px));z-index:3;color:#fff;text-decoration:none;font:600 14px Inter,system-ui,sans-serif;padding:11px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.28);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);white-space:nowrap}
 canvas.framed{border-radius:44px;box-shadow:0 0 0 10px #1a1a1e,0 30px 90px rgba(0,0,0,.7)}</style></head>
-<body><canvas id="c" width="1080" height="1350"></canvas><script src="snooze.js"></script>
+<body><canvas id="c" width="1080" height="1350"></canvas><a id="al" href="alarm/">Use it as my alarm →</a><script src="snooze.js"></script>
 <script>
 (() => { const c = document.getElementById('c'); const fit = () => { const vw = innerWidth, vh = innerHeight, ar = c.width / c.height;
   const portrait = vh / vw >= 1.6; let w, hh;
