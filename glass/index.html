@@ -1,0 +1,81 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>glass.js</title>
+<meta name="description" content="Liquid glass for canvas in one small file. No WebGL. Free, MIT, by @f0rgent.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{--bg:#07050c;--fg:#f4f1ee;--dim:#a39aa8;--acc:#ff7a45;--card:#130f1a;--line:#2a2233}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 Inter,system-ui,sans-serif}
+main{max-width:760px;margin:0 auto;padding:32px max(16px,env(safe-area-inset-right,0px)) 64px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:22px}
+canvas{width:100%;height:auto;border-radius:28px;display:block;touch-action:none;cursor:grab}
+h1{font:800 44px/1.05 Inter,system-ui,sans-serif;margin:0;letter-spacing:-.02em;text-wrap:balance}
+p{margin:0;color:var(--dim)} p b{color:var(--fg)}
+pre{margin:0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;overflow-x:auto;font:500 13px/1.6 "JetBrains Mono",ui-monospace,monospace;color:#e8ddd6}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+a.btn,button.btn{display:inline-block;text-decoration:none;border:0;border-radius:999px;padding:12px 18px;font:700 15px Inter,system-ui,sans-serif;background:var(--acc);color:#1a0a02;cursor:pointer}
+a.btn.g,button.btn.g{background:transparent;color:var(--fg);border:1px solid var(--line)}
+h2{font:700 13px Inter,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:12px 0 -10px}
+</style></head><body><main>
+<canvas id="c" width="1200" height="900"></canvas>
+<h1>glass.js</h1>
+<p>Liquid glass for <b>canvas</b> in one file. Lensing on the rim, blur and zoom in the body, a bevel, a hotspot and a chromatic fringe. No WebGL, no shaders, works in Safari. Drag the pieces above. This is the effect from the <a href="/snooze/" style="color:var(--acc)">Snooze</a> lock screen.</p>
+<div class="row"><a class="btn" href="glass.js" download>glass.js</a><a class="btn g" href="https://github.com/f0rgent/f0rgent.github.io/tree/main/glass">Source</a><button class="btn g" id="cp">Copy the prompt</button></div>
+<h2>Use it</h2>
+<pre>&lt;script src="glass.js"&gt;&lt;/script&gt;
+const g = createGlass(ctx);
+g.setBackdrop(wallpaperCanvas);        // what sits behind the glass
+g.glass(g.rect(80, 80, 420, 140, 44), { tint: 0.12 });
+g.glass(g.circle(300, 500, 90), { dark: 0.35 });
+g.glass(g.text('7:00', 600, 700, '800 300px Inter'));</pre>
+<h2>Options</h2>
+<pre>thick    rim lens width          mag      body zoom (1.06)
+tint     white wash (0.1)        edgeMag  rim zoom (1.32)
+caustic  light thrown below      spec     hotspot on/off
+rim      rim line width          dark     smoked glass 0..1</pre>
+<h2>The prompt</h2>
+<p>Paste this into Claude to get the same effect in your own stack.</p>
+<pre id="pr"></pre>
+<p>MIT. Made by <a href="https://x.com/f0rgent" style="color:var(--acc)">@f0rgent</a>.</p>
+</main>
+<script src="glass.js"></script>
+<script>
+const PROMPT = `Build an Apple-style "liquid glass" effect on an HTML canvas with plain 2D context, no WebGL.
+For each glass shape (rounded rect, circle or text), composite these layers:
+1. Body: a blurred copy of the backdrop (blur about 14px, saturate 1.5), scaled up ~6% around the shape's center, clipped to the shape.
+2. Rim lens: a sharp, more saturated copy of the backdrop scaled ~32% around the center, kept only inside a band along the shape's edge (stroke the shape with lineWidth = 2 x thickness and use destination-in).
+3. A white tint (~10%) and a vertical gradient: brighter at the top, clear in the middle.
+4. Inner bevel: a blurred white stroke offset up-left and a blurred dark-violet stroke offset down-right.
+5. A soft elliptical specular hotspot near the top-left, additive.
+6. Outside the shape: a soft drop shadow and a warm "caustic" glow below it, both drawn with the shadow-offset trick (draw at x-4000, shadowOffsetX 4000) so it works without ctx.filter in Safari.
+7. Rim line: a diagonal white gradient stroke, plus a 2px chromatic fringe (red, blue and green strokes offset by ~2px, lighter blend, 55% alpha).
+Feature-detect ctx.filter; when missing, blur by drawing into a tiny canvas and scaling back up.
+Expose: createGlass(ctx) -> { setBackdrop(canvas), rect(), circle(), text(), glass(shape, opts) } with opts thick, tint, mag, edgeMag, caustic, spec, rim, dark.`;
+document.getElementById('pr').textContent = PROMPT;
+document.getElementById('cp').onclick = (e) => { const b = e.target; navigator.clipboard.writeText(PROMPT).then(() => { b.textContent = 'Copied'; }, () => { const r = document.createRange(); r.selectNodeContents(document.getElementById('pr')); getSelection().removeAllRanges(); getSelection().addRange(r); }); };
+
+const c = document.getElementById('c'), x = c.getContext('2d'), W = c.width, H = c.height;
+const [BG, bg] = (() => { const k = document.createElement('canvas'); k.width = W; k.height = H; return [k, k.getContext('2d')]; })();
+const g = createGlass(x);
+const P = [{ k: 'pill', x: 330, y: 250 }, { k: 'dot', x: 900, y: 300 }, { k: 'txt', x: 600, y: 720 }];
+function wall(t) {
+  const sky = bg.createLinearGradient(0, 0, 0, H); sky.addColorStop(0, '#241a5c'); sky.addColorStop(0.55, '#b0457a'); sky.addColorStop(0.8, '#ff9a4a'); sky.addColorStop(1, '#3a1840'); bg.fillStyle = sky; bg.fillRect(0, 0, W, H);
+  const sx = W / 2 + Math.sin(t * 0.4) * 260, sy = H * 0.62 + Math.cos(t * 0.3) * 40;
+  const s = bg.createRadialGradient(sx, sy, 0, sx, sy, 260); s.addColorStop(0, 'rgba(255,240,200,1)'); s.addColorStop(0.3, 'rgba(255,190,110,0.9)'); s.addColorStop(1, 'rgba(255,120,80,0)'); bg.fillStyle = s; bg.fillRect(0, 0, W, H);
+  bg.fillStyle = 'rgba(255,255,255,0.8)'; for (let i = 0; i < 90; i++) { const px = (i * 137.5) % W, py = (i * 61.7) % (H * 0.5); bg.globalAlpha = 0.3 + 0.7 * Math.abs(Math.sin(t + i)); bg.fillRect(px, py, 2.5, 2.5); } bg.globalAlpha = 1;
+  bg.fillStyle = '#1e0f2e'; bg.beginPath(); bg.moveTo(0, H); for (let i = 0; i <= 12; i++) bg.lineTo(i * W / 12, H * 0.8 + Math.sin(i * 1.3 + 1) * 30); bg.lineTo(W, H); bg.fill();
+}
+function shapeOf(p) { return p.k === 'pill' ? g.rect(p.x - 230, p.y - 75, 460, 150, 75) : p.k === 'dot' ? g.circle(p.x, p.y, 110) : g.text('glass', p.x, p.y, '800 250px Inter'); }
+let drag = null;
+function frame(now) { const t = now / 1000; wall(t); x.drawImage(BG, 0, 0); g.setBackdrop(BG);
+  g.glass(shapeOf(P[2]), { thick: 14, mag: 1.08, edgeMag: 1.3, tint: 0.14, spec: false, rim: 1.6 });
+  g.glass(shapeOf(P[0]), { thick: 22, tint: 0.12 });
+  x.save(); x.fillStyle = '#fff'; x.font = '700 44px Inter'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('Drag me', P[0].x, P[0].y + 2); x.restore();
+  g.glass(shapeOf(P[1]), { thick: 24, mag: 1.1, edgeMag: 1.45, dark: 0.25 });
+  requestAnimationFrame(frame); }
+const pt = (e) => { const r = c.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width * W, y: (e.clientY - r.top) / r.height * H }; };
+c.addEventListener('pointerdown', (e) => { const p = pt(e); let best = null, bd = 1e9; for (const q of P) { const d = Math.hypot(q.x - p.x, q.y - p.y); if (d < bd) { bd = d; best = q; } } if (bd < 280) { drag = { q: best, dx: best.x - p.x, dy: best.y - p.y }; c.setPointerCapture(e.pointerId); } });
+c.addEventListener('pointermove', (e) => { if (!drag) return; const p = pt(e); drag.q.x = p.x + drag.dx; drag.q.y = p.y + drag.dy; });
+c.addEventListener('pointerup', () => { drag = null; });
+document.fonts.load('800 60px Inter').finally(() => requestAnimationFrame(frame));
+</script></body></html>
