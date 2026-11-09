@@ -1,0 +1,139 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Snooze">
+<meta name="theme-color" content="#000000">
+<title>Snooze alarm</title>
+<meta name="description" content="A real bedside alarm you can only snooze with a gesture. Liquid glass, by @f0rgent.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@700&display=swap">
+<style>
+:root{--acc:#ff7a45;--fg:#f4f1ee;--dim:rgba(244,241,238,.55);--line:rgba(255,255,255,.12);--glass:rgba(255,255,255,.07)}
+html,body{margin:0;height:100%;background:#000;color:var(--fg);overflow:hidden;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;font-family:Inter,system-ui,-apple-system,sans-serif}
+body{display:flex;align-items:center;justify-content:center}
+canvas{display:block;touch-action:none}
+canvas.framed{border-radius:44px;box-shadow:0 0 0 10px #1a1a1e,0 30px 90px rgba(0,0,0,.7)}
+.scr{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:calc(24px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));box-sizing:border-box;background:radial-gradient(120% 70% at 50% 0%,#2a1408 0%,#0a0604 45%,#000 100%);z-index:5}
+.scr[hidden]{display:none}
+.wrap{width:100%;max-width:420px;display:flex;flex-direction:column;gap:18px}
+h1{font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0;font-weight:600;text-align:center}
+.time{appearance:none;-webkit-appearance:none;background:var(--glass);border:1px solid var(--line);border-radius:28px;color:var(--fg);font:700 64px/1 Inter,system-ui,sans-serif;text-align:center;padding:18px 10px;width:100%;box-sizing:border-box;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color-scheme:dark;min-height:120px}
+.time::-webkit-date-and-time-value{text-align:center}.time::-webkit-calendar-picker-indicator{display:none}
+.lbl{font-size:13px;color:var(--dim);margin:0 0 -6px 4px;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--glass);border:1px solid var(--line);color:var(--fg);border-radius:999px;padding:9px 14px;font:600 14px Inter,system-ui,sans-serif;cursor:pointer}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#1a0a02}
+.btn{appearance:none;border:0;border-radius:999px;padding:18px;font:700 18px Inter,system-ui,sans-serif;background:var(--acc);color:#1a0a02;cursor:pointer;width:100%}
+.btn.ghost{background:transparent;color:var(--dim);border:1px solid var(--line);padding:14px;font-size:15px}
+.row{display:flex;gap:10px}.row .btn{flex:1}
+.note{font-size:13px;line-height:1.5;color:var(--dim);margin:0}
+.note b{color:var(--fg);font-weight:600}
+#armed{background:#000;justify-content:flex-start}
+#armed .float{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);text-align:center;transition:transform 2s ease;width:max-content}
+#aclock{font:700 96px/1 Inter,system-ui,sans-serif;color:#3a2a22;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+#ainfo{font:600 16px Inter,system-ui,sans-serif;color:#4a3328;margin-top:10px}
+#armed .bottom{position:absolute;left:0;right:0;bottom:calc(28px + env(safe-area-inset-bottom,0px));display:flex;gap:10px;justify-content:center;padding:0 20px}
+#armed .bottom .btn{width:auto;padding:12px 20px;font-size:14px;color:#6a4a3a;border-color:#2a1d17}
+#stop{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(60px + env(safe-area-inset-bottom,0px));z-index:6;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.28);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#fff;border-radius:999px;padding:12px 22px;font:600 14px Inter,system-ui,sans-serif;overflow:hidden;touch-action:none}
+#stop i{position:absolute;inset:0;background:rgba(255,255,255,.35);transform-origin:left;transform:scaleX(0)}
+#stop span{position:relative}
+#warn{color:#ffb38f}
+</style></head>
+<body><canvas id="c" width="1080" height="1350"></canvas>
+
+<section class="scr" id="setup"><div class="wrap">
+  <h1>Snooze alarm</h1>
+  <input class="time" id="t" type="time" value="07:00">
+  <p class="lbl">To snooze, you have to</p>
+  <div class="chips" id="chips"></div>
+  <button class="btn" id="set">Set alarm</button>
+  <p class="note">Leave this page open on your nightstand with the phone <b>plugged in</b> and the <b>volume up</b>. The screen stays on and goes almost black. It rings even in silent mode. To turn it off for real, hold <b>I'm up</b> under the alarm.</p>
+  <p class="note" id="warn" hidden></p>
+</div></section>
+
+<section class="scr" id="armed" hidden>
+  <div class="float" id="af"><div id="aclock">0:00</div><div id="ainfo"></div></div>
+  <div class="bottom"><button class="btn ghost" id="test">Test in 5 s</button><button class="btn ghost" id="cancel">Cancel</button></div>
+</section>
+
+<button id="stop" hidden><i></i><span>hold: I'm up</span></button>
+
+<script>
+(() => { const c = document.getElementById('c'); const fit = () => { const vw = innerWidth, vh = innerHeight, ar = c.width / c.height;
+  const portrait = vh / vw >= 1.6; let w, hh;
+  if (portrait) { w = vw; hh = vh; c.classList.remove('framed'); } else { hh = vh * 0.92; w = hh * ar; if (w > vw * 0.92) { w = vw * 0.92; hh = w / ar; } c.classList.add('framed'); }
+  c.style.width = w + 'px'; c.style.height = hh + 'px'; }; addEventListener('resize', fit); window.__fit = fit; })();
+
+// ---------- alarm controller (read by snooze.js) ----------
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const MODES = [['Push the sun back down', 'Push the sun down'], ['Wind time back', 'Wind time back'], ['Hold it until it hushes', 'Hold until it hushes'], ['Pet the cat', 'Pet the cat'], ['It shrinks every time', 'It shrinks'], ['Pull the blanket up', 'Pull the blanket'], ['Count three sheep', 'Count 3 sheep'], ['Bargain with it', 'Bargain'], ['Flip it face down', 'Flip it over']];
+  const store = { get(k, d) { try { const v = localStorage.getItem('snz_' + k); return v == null ? d : v; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem('snz_' + k, v); } catch (e) {} } };
+  let pick = store.get('mode', 'r'); // 'r' = random each time
+  const st = { armed: false, ringing: false, at: 0, alarmHM: '07:00', cur: 0, wake: null };
+  window.SNZ_PAUSE = true;
+
+  const h12 = (() => { try { return new Intl.DateTimeFormat([], { hour: 'numeric' }).resolvedOptions().hour12; } catch (e) { return false; } })();
+  const fmt = (d) => { const h = d.getHours(), m = String(d.getMinutes()).padStart(2, '0'); return h12 ? `${h % 12 || 12}:${m}` : `${h}:${m}`; };
+  window.ALARM = {
+    clock: () => fmt(new Date()),
+    date: () => new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }),
+    snoozed(mins) { stopSound(); st.ringing = false; $('stop').hidden = true; st.at = Date.now() + mins * 60000; const u = new Date(st.at);
+      setTimeout(() => { if (!st.ringing && st.armed) showArmed(); }, 4500); return mins < 1 ? fmt(u) + ':' + String(u.getSeconds()).padStart(2, '0') : fmt(u); },
+  };
+
+  // chips
+  const chips = $('chips'); const all = [['r', 'Random every time'], ...MODES];
+  for (const [k, n] of all) { const b = document.createElement('button'); b.className = 'chip' + (k === pick ? ' on' : ''); b.textContent = n; b.onclick = () => { pick = k; store.set('mode', k); [...chips.children].forEach((e) => e.classList.toggle('on', e === b)); }; chips.appendChild(b); }
+  $('t').value = store.get('time', '07:00');
+  if (!('wakeLock' in navigator)) { $('warn').hidden = false; $('warn').textContent = "This browser can't keep the screen on by itself. For tonight set Settings › Display › Auto-Lock to Never."; }
+
+  // ---------- sound: synthesized chime, baked crescendo, plays as <audio> so the silent switch does not mute it ----------
+  const SR = 22050;
+  function wav(samples) { const n = samples.length, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf); const w = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+    w(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); w(8, 'WAVE'); w(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, SR, true); v.setUint32(28, SR * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(36, 'data'); v.setUint32(40, n * 2, true);
+    for (let i = 0; i < n; i++) v.setInt16(44 + i * 2, Math.max(-1, Math.min(1, samples[i])) * 32767, true); return URL.createObjectURL(new Blob([buf], { type: 'audio/wav' })); }
+  function ringWav() { const secs = 48, out = new Float32Array(SR * secs); const notes = [1046.5, 1318.5, 1568, 2093, 1568, 1318.5]; const bar = 2.4;
+    for (let b = 0; b * bar < secs; b++) { notes.forEach((f, j) => { const t0 = b * bar + j * 0.14 + (j > 2 ? 0.1 : 0); const s0 = Math.floor(t0 * SR); for (let k = 0; k < SR * 0.9 && s0 + k < out.length; k++) { const t = k / SR; const env = Math.min(1, t / 0.004) * Math.exp(-t * 6); out[s0 + k] += env * (0.6 * Math.sin(2 * Math.PI * f * t) + 0.25 * Math.sin(2 * Math.PI * f * 2.01 * t) + 0.1 * Math.sin(2 * Math.PI * f * 3.98 * t)); } }); }
+    for (let i = 0; i < out.length; i++) { const t = i / SR; out[i] *= 0.42 * (0.18 + 0.82 * Math.min(1, t / 24)); } return wav(out); }
+  const SIL = wav(new Float32Array(SR)); let RING = null;
+  const au = new Audio(); au.loop = true; au.setAttribute('playsinline', ''); const ar = new Audio(); ar.loop = true; ar.setAttribute('playsinline', '');
+  function keepAlive() { if (au.src !== SIL) au.src = SIL; au.play().catch(() => {}); }
+  function unlock() { if (!RING) RING = ringWav(); if (ar.src !== RING) ar.src = RING; ar.muted = true; ar.play().then(() => { ar.pause(); ar.currentTime = 0; ar.muted = false; }).catch(() => { ar.muted = false; }); }
+  function startSound() { ar.muted = false; ar.currentTime = 0; ar.play().catch(() => { $('warn').hidden = false; $('warn').textContent = 'The browser blocked the sound. Tap the screen once after it starts ringing.'; }); if (navigator.vibrate) navigator.vibrate([400, 300, 400, 300, 400]); }
+  function stopSound() { ar.pause(); ar.currentTime = 0; keepAlive(); if (navigator.vibrate) navigator.vibrate(0); }
+
+  // ---------- wake lock ----------
+  async function lock() { try { if ('wakeLock' in navigator && !st.wake) { st.wake = await navigator.wakeLock.request('screen'); st.wake.addEventListener('release', () => { st.wake = null; }); } } catch (e) {} }
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && st.armed) { lock(); tick(); } });
+
+  function nextAt(hm) { const [h, m] = hm.split(':').map(Number); const d = new Date(); d.setHours(h, m, 0, 0); if (d.getTime() <= Date.now() + 1000) d.setDate(d.getDate() + 1); return d.getTime(); }
+  function showSetup() { $('setup').hidden = false; $('armed').hidden = true; $('stop').hidden = true; window.SNZ_PAUSE = true; }
+  function showArmed() { $('setup').hidden = true; $('armed').hidden = false; $('stop').hidden = true; window.SNZ_PAUSE = true; paintArmed(); }
+  function paintArmed() { const now = Date.now(); $('aclock').textContent = fmt(new Date()); if (now < (st.msgUntil || 0)) return; const left = Math.max(0, st.at - now), hh = Math.floor(left / 3600000), mm = Math.ceil((left % 3600000) / 60000);
+    $('ainfo').textContent = `rings at ${fmt(new Date(st.at))} · in ${hh ? hh + ' h ' : ''}${mm} min`;
+    const k = Math.floor(now / 60000); $('af').style.transform = `translate(calc(-50% + ${(k * 37) % 41 - 20}px), calc(-50% + ${(k * 53) % 61 - 30}px))`; }
+  function ring() { st.ringing = true; window.SNZ_PAUSE = false; $('setup').hidden = true; $('armed').hidden = true; $('stop').hidden = false;
+    const name = pick === 'r' || !MODES.some((m) => m[0] === pick) ? MODES[Math.floor(Math.random() * MODES.length)][0] : pick; window.api.setMode(Math.max(0, window.api.M.findIndex((m) => m.name === name)), false); startSound(); lock(); }
+  function tick() { if (!st.armed) return; if (!st.ringing && Date.now() >= st.at) ring(); else if (!$('armed').hidden) paintArmed(); }
+  setInterval(tick, 1000);
+
+  function arm(atMs) { st.armed = true; st.at = atMs; keepAlive(); lock(); try { navigator.audioSession && (navigator.audioSession.type = 'playback'); } catch (e) {} showArmed(); }
+  $('set').onclick = () => { const v = $('t').value || '07:00'; st.alarmHM = v; store.set('time', v); unlock(); arm(nextAt(v)); };
+  $('test').onclick = () => { unlock(); arm(Date.now() + 5000); };
+  $('cancel').onclick = () => { st.armed = false; st.ringing = false; au.pause(); ar.pause(); showSetup(); };
+
+  // hold to stop for real
+  let hold = null; const sb = $('stop'), fill = sb.querySelector('i');
+  const endHold = () => { if (hold) { cancelAnimationFrame(hold.raf); hold = null; fill.style.transform = 'scaleX(0)'; } };
+  sb.addEventListener('pointerdown', (e) => { e.preventDefault(); const t0 = performance.now(); const go = (now) => { const k = Math.min(1, (now - t0) / 1500); fill.style.transform = `scaleX(${k})`; if (k >= 1) { endHold(); done(); } else hold.raf = requestAnimationFrame(go); }; hold = { raf: requestAnimationFrame(go) }; });
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach((ev) => sb.addEventListener(ev, endHold));
+  function done() { st.ringing = false; stopSound(); $('stop').hidden = true; const next = nextAt(st.alarmHM); st.at = next; showArmed(); $('ainfo').textContent = `Good morning. Next alarm ${fmt(new Date(next))}, tomorrow.`; st.msgUntil = Date.now() + 20000; }
+  // any tap while ringing retries sound if it was blocked
+  document.getElementById('c').addEventListener('pointerdown', () => { if (st.ringing && ar.paused) ar.play().catch(() => {}); });
+  window.__alarm = { st, ring, arm };
+})();
+</script>
+<script src="../snooze.js"></script>
+<script>window.__fit();</script>
+</body></html>
