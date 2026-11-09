@@ -8,5 +8,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@700&display=swap">
 <style>html,body{margin:0;height:100%;background:#000;overflow:hidden;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
-canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none}</style></head>
-<body><canvas id="c" width="1080" height="1350"></canvas><script src="snooze.js"></script></body></html>
+body{display:flex;align-items:center;justify-content:center}
+canvas{display:block;touch-action:none}
+canvas.framed{border-radius:44px;box-shadow:0 0 0 10px #1a1a1e,0 30px 90px rgba(0,0,0,.7)}</style></head>
+<body><canvas id="c" width="1080" height="1350"></canvas><script src="snooze.js"></script>
+<script>
+(() => { const c = document.getElementById('c'); const fit = () => { const vw = innerWidth, vh = innerHeight, ar = c.width / c.height;
+  const portrait = vh / vw >= 1.6; let w, hh;
+  if (portrait) { w = vw; hh = vh; c.classList.remove('framed'); } else { hh = vh * 0.92; w = hh * ar; if (w > vw * 0.92) { w = vw * 0.92; hh = w / ar; } c.classList.add('framed'); }
+  c.style.width = w + 'px'; c.style.height = hh + 'px'; }; fit(); addEventListener('resize', fit); })();
+</script></body></html>
