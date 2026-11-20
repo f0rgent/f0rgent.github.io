@@ -118,17 +118,15 @@ form.mail button{cursor:pointer}
 /* dark scene theme */
 .me img{border:2px solid #f4efe655}
 .btn{border-color:#f4efe655}.btn.dark{background:var(--ink);color:#08080a;border-color:var(--ink)}.btn.teal{color:#0b0b0d}
-.scene{position:relative;border-radius:26px;overflow:hidden;border:1px solid #f4efe622;margin:0 0 16px;min-height:clamp(420px,46vw,620px);display:flex;align-items:center;
- background:radial-gradient(120% 90% at 78% 70%,#ff7a1a55,#7a3cff22 45%,#08080a 75%),#0d0d12}
-.scene>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% 50%}
-.scene:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#08080af2 0%,#08080ab8 34%,#08080a00 62%)}
-.scene .tx{position:relative;z-index:2;padding:clamp(22px,4vw,48px);max-width:600px}
-.scene h1{font-size:clamp(40px,5.6vw,72px)}
-.scene .lead{max-width:28ch}
+.scene{display:grid;grid-template-columns:1fr minmax(0,520px);gap:clamp(20px,4vw,56px);align-items:center;margin:6px 0 28px}
+.scene>*{min-width:0}
+.scene .pic{margin:0;border-radius:24px;overflow:hidden;border:1px solid #f4efe622;background:#0d0d12;aspect-ratio:1228/1515}
+.scene .pic img{display:block;width:100%;height:auto}
+.scene h1{font-size:clamp(42px,5.8vw,76px)}
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.shot{position:relative;margin:0;border-radius:22px;overflow:hidden;border:1px solid #f4efe622;aspect-ratio:4/3;background:#0d0d12}
+.shot{position:relative;margin:0;border-radius:22px;overflow:hidden;border:1px solid #f4efe622;background:#0d0d12;min-height:260px}
 .shot.on{background:radial-gradient(90% 80% at 50% 60%,#ff7a1a44,#0d0d12 70%)}
-.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shot img{display:block;width:100%;height:auto}
 .shot:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#08080ae6 0%,#08080a00 45%)}
 .shot figcaption{position:absolute;z-index:2;left:22px;right:22px;bottom:18px}
 .shot b{display:block;font-weight:900;font-size:clamp(20px,2.6vw,30px);letter-spacing:-.03em;line-height:1.1}
@@ -140,7 +138,7 @@ form.mail button{cursor:pointer}
 .pack{background:var(--card);border:1px solid #f4efe626}
 form.mail input{background:#08080a;border-color:#f4efe655}
 form.mail input::placeholder{color:#f4efe677}
-@media (max-width:860px){.duo{grid-template-columns:1fr}.scene:after{background:linear-gradient(0deg,#08080af2 0%,#08080acc 45%,#08080a33 100%)}.scene{align-items:flex-end}}
+@media (max-width:860px){.duo{grid-template-columns:1fr}.scene{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -151,13 +149,13 @@ form.mail input::placeholder{color:#f4efe677}
 </header>
 
 <div class="scene">
-  <img src="assets/scene-hero.jpg" alt="" onerror="this.remove()">
   <div class="tx">
     <h1>AI agents doing <em>real</em> work.</h1>
     <p class="lead">I show how AI agents actually do practical things.</p>
     <p class="fine">The catalog and the basic skill are free. The full pack is $9.</p>
     <div class="btns"><a class="btn teal" href="claude-skills-catalog/">Open the skills catalog</a><a class="btn" href="#email">Get new skills by email</a></div>
   </div>
+  <figure class="pic"><img src="assets/scene-hero.jpg" width="1228" height="1515" alt="A man with a laptop sits in a desert at dusk in front of a giant curved screen of code, a river of light pouring from it"></figure>
 </div>
 
 <div class="duo">
