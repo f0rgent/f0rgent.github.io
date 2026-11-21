@@ -112,7 +112,7 @@ form.mail button{cursor:pointer}
 .pack>*{min-width:0}.pack h2{color:var(--bg)}.pack p{opacity:.85}
 .pack ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
 .pack li{background:#ffffff12;border-radius:12px;padding:12px 14px}.pack li b{color:var(--gold)}
-.cmp{grid-column:1/-1;overflow-x:auto}.cmp table{width:100%;border-collapse:collapse;font-size:15px}.cmp th,.cmp td{padding:10px 12px;border-bottom:1px solid #ffffff1f;text-align:center}.cmp th:first-child,.cmp td:first-child{text-align:left}.cmp th{color:var(--gold);font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.cmp{grid-column:1/-1;overflow-x:auto}.cmp table{width:100%;border-collapse:collapse;font-size:15px}.cmp th,.cmp td{padding:10px 12px;border-bottom:1px solid #ffffff1f;text-align:center}.cmp th:first-child,.cmp td:first-child{text-align:left}.cmp td:not(:first-child){color:var(--teal);font-weight:700}.cmp td.no{color:#f4efe659;font-weight:400}.cmp th{color:var(--gold);font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
 @media (max-width:860px){.hub,.sign,.pack{grid-template-columns:1fr}}
 
 /* dark scene theme */
@@ -199,19 +199,19 @@ form.mail input::placeholder{color:#f4efe677}
     </ul>
     <div class="cmp">
       <table>
-        <thead><tr><th></th><th>Free</th><th>Pro pack</th></tr></thead>
+        <thead><tr><th>What you get</th><th>Free</th><th>Pro pack</th></tr></thead>
         <tbody>
           <tr><td>Skills catalog (3,494 skills)</td><td>✓</td><td>✓</td></tr>
           <tr><td>x-reach: data on what gets reach</td><td>✓</td><td>✓</td></tr>
           <tr><td>Post templates</td><td>2</td><td>4</td></tr>
-          <tr><td>First-reply recipe</td><td></td><td>✓</td></tr>
-          <tr><td>Series, video checklist, tracking</td><td></td><td>✓</td></tr>
-          <tr><td>Episode loop: prompt, record, edit, post</td><td></td><td>✓</td></tr>
-          <tr><td>X Article playbooks (tech, money)</td><td></td><td>✓</td></tr>
-          <tr><td>Monetization playbook + 30-day checklist</td><td></td><td>✓</td></tr>
-          <tr><td>frame-critic: frame-by-frame check of your AI video</td><td></td><td>✓</td></tr>
-          <tr><td>skill-stack: starter stacks by role + safety check</td><td></td><td>✓</td></tr>
-          <tr><td>New prompts after each episode</td><td></td><td>✓</td></tr>
+          <tr><td>First-reply recipe</td><td class="no">✕</td><td>✓</td></tr>
+          <tr><td>Series, video checklist, tracking</td><td class="no">✕</td><td>✓</td></tr>
+          <tr><td>Episode loop: prompt, record, edit, post</td><td class="no">✕</td><td>✓</td></tr>
+          <tr><td>X Article playbooks (tech, money)</td><td class="no">✕</td><td>✓</td></tr>
+          <tr><td>Monetization playbook + 30-day checklist</td><td class="no">✕</td><td>✓</td></tr>
+          <tr><td>frame-critic: frame-by-frame check of your AI video</td><td class="no">✕</td><td>✓</td></tr>
+          <tr><td>skill-stack: starter stacks by role + safety check</td><td class="no">✕</td><td>✓</td></tr>
+          <tr><td>New prompts after each episode</td><td class="no">✕</td><td>✓</td></tr>
         </tbody>
       </table>
     </div>
