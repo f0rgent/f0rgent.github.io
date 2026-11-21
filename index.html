@@ -7,19 +7,18 @@
 <meta name="description" content="How AI agents actually do practical things. Free Claude skills catalog, weekly email, and the X Creator Pack.">
 <meta property="og:title" content="f0rgent · practical AI agents">
 <meta property="og:description" content="Free Claude skills catalog, a weekly email, and the X Creator Pack.">
-<meta property="og:image" content="https://f0rgent.github.io/assets/og.jpg">
+<meta property="og:image" content="https://f0rgent.github.io/assets/og-v2.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@f0rgent">
-<link rel="icon" href="assets/avatar-v3.jpg">
+<link rel="icon" href="assets/avatar-v4.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f1e8d8;--card:#fbf6ec;--ink:#0e2a2d;--mute:#0e2a2d99;--line:#0e2a2d1f;--teal:#1d7f86;--gold:#e8b04a;--red:#c2382d;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace}
+:root{--bg:#08080a;--card:#121214;--ink:#f4efe6;--mute:#f4efe699;--line:#f4efe61f;--teal:#ff7a1a;--gold:#ffb347;--red:#ff7a1a;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;
- background-image:radial-gradient(#0e2a2d14 1.2px,transparent 1.2px);background-size:22px 22px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:inherit}
 .wrap{max-width:1180px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right))}
 header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:28px}
@@ -115,27 +114,48 @@ form.mail button{cursor:pointer}
 .pack li{background:#ffffff12;border-radius:12px;padding:12px 14px}.pack li b{color:var(--gold)}
 .cmp{grid-column:1/-1;overflow-x:auto}.cmp table{width:100%;border-collapse:collapse;font-size:15px}.cmp th,.cmp td{padding:10px 12px;border-bottom:1px solid #ffffff1f;text-align:center}.cmp th:first-child,.cmp td:first-child{text-align:left}.cmp th{color:var(--gold);font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
 @media (max-width:860px){.hub,.sign,.pack{grid-template-columns:1fr}}
+
+/* dark scene theme */
+.me img{border:2px solid #f4efe655}
+.btn{border-color:#f4efe655}.btn.dark{background:var(--ink);color:#08080a;border-color:var(--ink)}.btn.teal{color:#0b0b0d}
+.scene{display:grid;grid-template-columns:1fr minmax(0,520px);gap:clamp(20px,4vw,56px);align-items:center;margin:6px 0 28px}
+.scene>*{min-width:0}
+.scene .pic{margin:0;border-radius:24px;overflow:hidden;border:1px solid #f4efe622;background:#0d0d12;aspect-ratio:1228/1515}
+.scene .pic img{display:block;width:100%;height:auto}
+.scene h1{font-size:clamp(42px,5.8vw,76px)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.shot{position:relative;margin:0;border-radius:22px;overflow:hidden;border:1px solid #f4efe622;background:#0d0d12;min-height:260px}
+.shot.on{background:radial-gradient(90% 80% at 50% 60%,#ff7a1a44,#0d0d12 70%)}
+.shot img{display:block;width:100%;height:auto}
+.shot:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#08080ae6 0%,#08080a00 45%)}
+.shot figcaption{position:absolute;z-index:2;left:22px;right:22px;bottom:18px}
+.shot b{display:block;font-weight:900;font-size:clamp(20px,2.6vw,30px);letter-spacing:-.03em;line-height:1.1}
+.shot span{font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.shot.on span{color:var(--gold)}.shot.off b{color:#f4efe6c4}.shot.off span{color:var(--mute)}
+.tile,.sign,.stat{box-shadow:none;border-width:1px;border-color:#f4efe626}
+.tile.paid{background:var(--teal);color:#0b0b0d}.tile.paid p{color:#0b0b0d}.tile.paid .k{color:#0b0b0d}
+.sign{background:var(--card);color:var(--ink)}
+.pack{background:var(--card);border:1px solid #f4efe626}
+form.mail input{background:#08080a;border-color:#f4efe655}
+form.mail input::placeholder{color:#f4efe677}
+@media (max-width:860px){.duo{grid-template-columns:1fr}.scene{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header class="top">
-  <a class="me" href="https://x.com/f0rgent"><img src="assets/avatar-v3.jpg" alt=""><div><b>f0rgent</b><span>@f0rgent</span></div></a>
+  <a class="me" href="https://x.com/f0rgent"><img src="assets/avatar-v4.jpg" alt=""><div><b>f0rgent</b><span>@f0rgent</span></div></a>
   <div class="btns"><a class="btn dark" href="https://x.com/f0rgent">Follow on 𝕏</a></div>
 </header>
 
-<div class="hero">
-  <div>
+<div class="scene">
+  <div class="tx">
     <h1>AI agents doing <em>real</em> work.</h1>
     <p class="lead">I show how AI agents actually do practical things.</p>
     <p class="fine">The catalog and the basic skill are free. The full pack is $9.</p>
     <div class="btns"><a class="btn teal" href="claude-skills-catalog/">Open the skills catalog</a><a class="btn" href="#email">Get new skills by email</a></div>
   </div>
-  <div class="meme" aria-label="A muscular robot labelled Claude with skills next to a skinny crying robot labelled Claude without skills">
-    <div class="caps"><div class="cap l">Claude with skills</div><div class="cap r">Claude without skills</div></div>
-    <img src="assets/robots.jpg" alt="">
-    <div class="stamp">AI slop</div>
-  </div>
+  <figure class="pic"><img src="assets/scene-hero.jpg" width="1228" height="1515" alt="A man with a laptop sits in a desert at dusk in front of a giant curved screen of code, a river of light pouring from it"></figure>
 </div>
 
 <section style="margin-top:20px">
