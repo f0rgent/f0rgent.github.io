@@ -7,7 +7,7 @@ PAGE = r"""<!doctype html><meta charset=utf-8><title>ps5watch</title>
 <style>:root{--b:#b3200f;--h:#ff8a3c;--l:#ff5a2a;--g:#ff3b12;--d:#8a2a16;--s:#ffd24a}:root.green{--b:#1f8f3a;--h:#7dff9a;--l:#5dff86;--g:#2bff6a;--d:#2c7a41;--s:#ffd24a}html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Menlo,Monaco,monospace}
 canvas{position:fixed;inset:0}#hud{position:fixed;left:4.5%;top:6%;border:1px solid var(--b);background:#000c;color:var(--h);font-size:clamp(16px,1.7vw,26px);padding:10px 18px;text-shadow:0 0 8px var(--g)}
 #log{position:fixed;left:4.5%;right:4.5%;bottom:5%;height:46%;border:1px solid var(--b);background:#000;color:var(--l);font-size:clamp(13px,1.25vw,20px);line-height:1.55;padding:10px 22px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;text-shadow:0 0 6px var(--g)}
-#log div{white-space:nowrap}.t{color:var(--d)}.s{color:#ffb02e;text-shadow:0 0 6px #ff7a00}.n{color:#4dff7c;text-shadow:0 0 6px #19c94d}.r{color:#ff3a2a;text-shadow:0 0 7px #ff1a0a}.w{color:#3b8f55}#cur{display:inline-block;width:.6em;height:1em;background:var(--l);vertical-align:-2px;animation:b 1s steps(1) infinite}@keyframes b{50%{opacity:0}}</style>
+#log div{white-space:nowrap}.t{color:var(--d)}.s{color:#ffb02e;text-shadow:0 0 6px #ff7a00}.n{color:#4dff7c;text-shadow:0 0 6px #19c94d}.w{color:#f4f4f4;text-shadow:0 0 5px #fff6}.r{color:#ff3a2a;text-shadow:0 0 7px #ff1a0a}#cur{display:inline-block;width:.6em;height:1em;background:var(--l);vertical-align:-2px;animation:b 1s steps(1) infinite}@keyframes b{50%{opacity:0}}</style>
 <canvas id=c></canvas><div id=hud>ps5watch :: waiting for the console</div><div id=log></div>
 <script>
 const c=document.getElementById('c'),x=c.getContext('2d');let cols=[],fs=22;
@@ -19,8 +19,8 @@ const log=document.getElementById('log'),hud=document.getElementById('hud');let 
 const kb=n=>n>=1048576?(n/1048576).toFixed(1)+' MB':(n/1024).toFixed(1)+' KB',esc=s=>String(s).replace(/[<&>]/g,'');
 async function poll(){try{const r=await (await fetch('/events?pos='+pos)).json();pos=r.pos;
 for(const e of r.events){t=e.t||t;const d=document.createElement('div');const ts='<span class=t>['+String((t).toFixed(2)).padStart(8)+']</span> ';
-const hot=/telemetry|metric|analytic|track|collect|stats|event|beacon/i;if(e.k=='dns'){look++;d.innerHTML=ts+'<span class='+(hot.test(e.name)?'r':'n')+'>DNS  '+esc(e.name)+'</span>'}
-else if(e.k=='conn'){up+=e.up||0;down+=e.down||0;d.innerHTML=ts+'<span class='+(hot.test(e.host)?'r':'s')+'>SEND '+esc(e.host)+(e.port?':'+e.port:'')+'  up '+kb(e.up||0)+'  down '+kb(e.down||0)+'</span>'}
+const hot=/telemetry|metric|analytic|track|collect|stats|event|beacon/i;if(e.k=='dns'){look++;d.innerHTML=ts+'<span class='+(hot.test(e.name)?'r':'n')+'>DNS  </span><span class='+(hot.test(e.name)?'r':'w')+'>'+esc(e.name)+'</span>'}
+else if(e.k=='conn'){up+=e.up||0;down+=e.down||0;d.innerHTML=ts+'<span class='+(hot.test(e.host)?'r':'s')+'>SEND </span><span class='+(hot.test(e.host)?'r':'w')+'>'+esc(e.host)+(e.port?':'+e.port:'')+'</span><span class=s>  up '+kb(e.up||0)+'  down '+kb(e.down||0)+'</span>'}
 else continue;log.appendChild(d);while(log.children.length>40)log.firstChild.remove()}
 if(pos)hud.textContent='ps5watch :: '+look+' lookups · sent '+kb(up)+' · received '+kb(down)+' · '+String(t/60|0).padStart(2,'0')+':'+String(t%60|0).padStart(2,'0')}catch(e){}
 setTimeout(poll,400)}poll();
