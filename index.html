@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#08080a;--card:#121214;--ink:#f4efe6;--mute:#f4efe699;--line:#f4efe61f;--teal:#ff7a1a;--gold:#ffb347;--red:#ff7a1a;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace}
+:root{--bg:#08080a;--card:#121214;--ink:#f4efe6;--mute:#f4efe699;--line:#f4efe61f;--teal:#e8231a;--gold:#ff5a4d;--red:#e8231a;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
@@ -125,7 +125,7 @@ form.mail button{cursor:pointer}
 .scene h1{font-size:clamp(42px,5.8vw,76px)}
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .shot{position:relative;margin:0;border-radius:22px;overflow:hidden;border:1px solid #f4efe622;background:#0d0d12;min-height:260px}
-.shot.on{background:radial-gradient(90% 80% at 50% 60%,#ff7a1a44,#0d0d12 70%)}
+.shot.on{background:radial-gradient(90% 80% at 50% 60%,#e8231a44,#0d0d12 70%)}
 .shot img{display:block;width:100%;height:auto}
 .shot:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#08080ae6 0%,#08080a00 45%)}
 .shot figcaption{position:absolute;z-index:2;left:22px;right:22px;bottom:18px}
@@ -133,7 +133,7 @@ form.mail button{cursor:pointer}
 .shot span{font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase}
 .shot.on span{color:var(--gold)}.shot.off b{color:#f4efe6c4}.shot.off span{color:var(--mute)}
 .tile,.sign,.stat{box-shadow:none;border-width:1px;border-color:#f4efe626}
-.tile.paid{background:var(--teal);color:#0b0b0d}.tile.paid p{color:#0b0b0d}.tile.paid .k{color:#0b0b0d}
+.tile.paid{background:#d4160c;border-color:#d4160c;color:#fff}.tile.paid p{color:#fff}.tile.paid .k{color:#fff}.tile.paid a{color:#fff}.btn.teal{background:#d4160c;border-color:#d4160c;color:#fff}
 .sign{background:var(--card);color:var(--ink)}
 .pack{background:var(--card);color:var(--ink);border:1px solid #f4efe626}.pack h2{color:var(--ink)}.pack li{background:#f4efe60d}.bonus{background:var(--card);color:var(--ink)}.bonus h2{color:var(--ink)}
 .cp,pre{background:#1c1c21;color:var(--ink)}
