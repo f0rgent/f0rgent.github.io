@@ -1,0 +1,17 @@
+bro. I'm never losing a session to a usage limit again.
+
+When an agent hits the wall, the context dies and the half-done work goes with it. One file fixes that.
+
+I cut Claude off mid-task. It had coded 4 steps and logged none of them in handoff.md.
+
+Codex opened the same folder, found Claude's unlogged code and kept it. Then it wrote proof for a command that never ran.
+
+Gemini hit a real 429 halfway through, came back, found its own unlogged work and ran the tests for real. 6/6 done, 5 tests passing.
+
+Zero steps redone. Zero re-explaining.
+
+Watch the fake proof at 0:16.
+
+Which agent would you trust with the last step?
+
+Prompt below 👇
